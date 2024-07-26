@@ -1,29 +1,47 @@
-/**
- * The main function for the action.
- * @returns {Promise<void>} Resolves when the action is complete.
- */
-const core = require('@actions/core')
+const core = require('@actions/core');
+const fetch = require('node-fetch');
 
-// Import the core GitHub Actions toolkit
+async function fetchAttachments(url) {
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log('Fetched Data:', data);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+}
 
 // Define your action function
 async function run() {
   try {
     // Get the input values from the user
-    const name = core.getInput('project')
-    const message = core.getInput('space')
+    const project = core.getInput('project');
+    const space = core.getInput('space');
+    const name = core.getInput('name');
+    const token = process.env.PET_TOKEN;
 
-    // Perform your action logic here
-    console.log(`Hello, ${name}! Your message is: ${message}`)
+    // Log the input values to the GitHub Actions console
+    console.log(`The project is: ${project}`);
+    console.log(`The space is: ${space}`);
+    console.log(`The name is: ${name}`);
 
-    // Set the output value (if needed)
-    core.setOutput('result', 'Action completed successfully')
+    // URL for fetching attachments
+    const url = `https://pet-gematikde.msappproxy.net/polarion/rest/v1/projects/${project}/spaces/${space}/documents/${name}/attachments?fields%5Bdocument_attachments%5D=%40all`;
+    await fetchAttachments(url);
+
   } catch (error) {
     // Handle any errors that occur during the action
-    core.setFailed(error.message)
+    core.setFailed(error.message);
   }
 }
 
 module.exports = {
   run
-}
+};
