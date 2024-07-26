@@ -1,26 +1,25 @@
-const core = require('@actions/core')
-const { wait } = require('./wait')
-
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
+const core = require('@actions/core')
+
+// Import the core GitHub Actions toolkit
+
+// Define your action function
 async function run() {
   try {
-    const ms = core.getInput('milliseconds', { required: true })
+    // Get the input values from the user
+    const name = core.getInput('project')
+    const message = core.getInput('space')
 
-    // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-    core.debug(`Waiting ${ms} milliseconds ...`)
+    // Perform your action logic here
+    console.log(`Hello, ${name}! Your message is: ${message}`)
 
-    // Log the current timestamp, wait, then log the new timestamp
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
-
-    // Set outputs for other workflow steps to use
-    core.setOutput('time', new Date().toTimeString())
+    // Set the output value (if needed)
+    core.setOutput('result', 'Action completed successfully')
   } catch (error) {
-    // Fail the workflow run if an error occurs
+    // Handle any errors that occur during the action
     core.setFailed(error.message)
   }
 }

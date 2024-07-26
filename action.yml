@@ -1,19 +1,22 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
-
-# Define your inputs here.
+name: 'Polarion Updater'
+description: 'Updates Pictures in Polarion Documents'
 inputs:
-  milliseconds:
-    description: 'Your input description here'
+  project:
+    description: 'The project that will be updated'
     required: true
-    default: '1000'
+    default: 'Mainline_OPB1'
+  space:
+    description: 'The space that will be updated'
+    required: true
+    default: 'Spezifikation'
+  name:
+    description: 'The name of the document that will be updated'
+    required: true
+    default: 'gemSpec_TI-M_Basis'
 
-# Define your outputs here.
 outputs:
-  time:
-    description: 'Your output description here'
-
+  time: # id of output
+    description: 'The time we greeted you'
 runs:
-  using: node20
-  main: dist/index.js
+  using: 'node20'
+  main: 'index.js'
